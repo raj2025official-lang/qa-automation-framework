@@ -1,36 +1,21 @@
-import pytest
 from selenium import webdriver
-from datetime import datetime
-
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+import pytest
 
 @pytest.fixture
 def driver():
-    from selenium.webdriver.chrome.options import Options
 
-    options = Options()
-    options.add_argument("--headless")
-    options.add_argument("--window-size=1920,1080")
+    chrome_options = Options()
 
-    driver = webdriver.Chrome(options=options)
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+
+    driver = webdriver.Chrome(options=chrome_options)
+
     driver.maximize_window()
+
     yield driver
+
     driver.quit()
-
-
-@pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-
-    outcome = yield
-    report = outcome.get_result()
-
-    if report.when == "call" and report.failed:
-
-        driver = item.funcargs["driver"]
-
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
-        screenshot_name = f"screenshot_{timestamp}.png"
-
-        driver.save_screenshot(screenshot_name)
-
-        print(f"\nScreenshot saved: {screenshot_name}")
