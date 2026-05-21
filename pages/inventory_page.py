@@ -22,10 +22,7 @@ class InventoryPage:
             item.click()
 
     def go_to_cart(self):
-        cart = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, "shopping_cart_link"))
-        )
-        cart.click()
+      self.driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
 
     def remove_item_from_cart(self):
         remove_btn = WebDriverWait(self.driver, 10).until(
