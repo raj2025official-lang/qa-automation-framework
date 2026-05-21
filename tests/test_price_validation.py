@@ -7,13 +7,18 @@ from pages.cart_page import CartPage
 
 @pytest.fixture
 def driver():
+
     driver = webdriver.Chrome()
+
     driver.maximize_window()
+
     yield driver
+
     driver.quit()
 
 
 def test_price_validation(driver):
+
     # Step 1: Open website
     driver.get("https://www.saucedemo.com/")
 
@@ -23,14 +28,14 @@ def test_price_validation(driver):
 
     # Step 3: Add product(s)
     inventory = InventoryPage(driver)
-    inventory.add_item_to_cart() 
-    
+    inventory.add_item_to_cart()
+
     # Step 4: Go to cart
     inventory.go_to_cart()
 
     # Step 5: Get prices from cart
     cart = CartPage(driver)
-    prices = cart.get_prices()   # This should return LIST of floats
+    prices = cart.get_prices()
 
     # Step 6: Validation
     assert len(prices) > 0, "No prices found in cart!"
