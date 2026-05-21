@@ -15,4 +15,4 @@ def test_checkout_flow(driver):
 
     inventory.go_to_cart()
 
-    assert "cart" in driver.current_url.lower()
+    assert "cart" in driver.current_url.lower(), f"Current URL: {driver.current_url}"
