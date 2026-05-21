@@ -1,20 +1,6 @@
-import pytest
-from selenium import webdriver
 from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
 from pages.cart_page import CartPage
-
-
-@pytest.fixture
-def driver():
-
-    driver = webdriver.Chrome()
-
-    driver.maximize_window()
-
-    yield driver
-
-    driver.quit()
 
 
 def test_price_validation(driver):
@@ -26,26 +12,27 @@ def test_price_validation(driver):
     login = LoginPage(driver)
     login.login("standard_user", "secret_sauce")
 
-    # Step 3: Add product(s)
+    # Step 3: Add product
     inventory = InventoryPage(driver)
     inventory.add_item_to_cart()
 
     # Step 4: Go to cart
     inventory.go_to_cart()
 
-    # Step 5: Get prices from cart
+    # Step 5: Get prices
     cart = CartPage(driver)
     prices = cart.get_prices()
 
-    # Step 6: Validation
+    # Step 6: Validate prices exist
     assert len(prices) > 0, "No prices found in cart!"
 
-    # Step 7: Check all prices are valid numbers
+    # Step 7: Validate prices are float
     for price in prices:
         assert isinstance(price, float), f"Invalid price format: {price}"
 
-    # Step 8: Optional total check
+    # Step 8: Validate total
     total = sum(prices)
+
     print("Total Cart Price:", total)
 
     assert total > 0, "Total price should be greater than 0"
